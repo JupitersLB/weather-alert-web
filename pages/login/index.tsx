@@ -1,7 +1,6 @@
 import { NextPage } from 'next'
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import axios from 'axios'
 import { useRouter } from 'next/router'
 import { app } from '../../services/firebase'
 import {
@@ -10,38 +9,37 @@ import {
   isSignInWithEmailLink,
   signInWithEmailLink,
 } from 'firebase/auth'
+import { RootStoreContext } from '../../stores/RootStore'
+import { observer } from 'mobx-react-lite'
 
-const LoginForm: React.FC = () => {
+const LoginForm: React.FC = observer(() => {
+  const { userStore } = useContext(RootStoreContext)
   const { register, handleSubmit } = useForm()
   const router = useRouter()
+  const auth = getAuth(app)
 
   useEffect(() => {
-    const auth = getAuth()
-
     if (isSignInWithEmailLink(auth, window.location.href)) {
       let email = window.localStorage.getItem('emailForSignIn')
-      if (!email) {
-        email = window.prompt('Please provide your email for confirmation')
+      if (email) {
+        signInWithEmailLink(auth, email, window.location.href)
+          .then((res) => {
+            window.localStorage.removeItem('emailForSignIn')
+            router.push('/')
+          })
+          .catch((error) => {
+            console.log('sign in link error: ', error)
+          })
       }
-      // The client SDK will parse the code from the link for you.
-      signInWithEmailLink(auth, email, window.location.href)
-        .then((res) => {
-          window.localStorage.removeItem('emailForSignIn')
-          router.push('/')
-        })
-        .catch((error) => {
-          console.log('sign in link error: ', error)
-        })
     }
-  }, [])
+  })
 
   const actionCodeSettings = {
-    url: 'http://localhost:3000/login',
+    url: 'http://localhost:3005/login',
     handleCodeInApp: true,
   }
 
   const onSubmit = (data: { email: string }) => {
-    const auth = getAuth(app)
     sendSignInLinkToEmail(auth, data.email, actionCodeSettings)
       .then((r) => {
         window.localStorage.setItem('emailForSignIn', data.email)
@@ -69,9 +67,9 @@ const LoginForm: React.FC = () => {
       </form>
     </div>
   )
-}
+})
 
-const Login: NextPage = () => {
+const Login: NextPage = observer(() => {
   return (
     <div className="container">
       <div className="flex flex-col lg:flex-row items-center mt-20">
@@ -81,6 +79,6 @@ const Login: NextPage = () => {
       </div>
     </div>
   )
-}
+})
 
 export default Login
