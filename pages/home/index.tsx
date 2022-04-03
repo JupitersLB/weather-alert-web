@@ -22,6 +22,9 @@ const Home: NextPage = observer(() => {
     <LoggedInLayout>
       <div>
         <h1>Hello! Logged in!</h1>
+        <p>firebase {userStore.firebaseToken}</p>
+        <p>weather id {userStore.weatherAlertToken?.id}</p>
+        <p>weather value {userStore.weatherAlertToken?.value}</p>
         <button onClick={logout}>logout</button>
       </div>
     </LoggedInLayout>

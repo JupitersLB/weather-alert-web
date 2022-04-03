@@ -30,7 +30,7 @@ export const UserStore = types
 
       return axios
         .post(
-          `${process.env.NEXT_PUBLIC_AGROAPI_URL}/users`,
+          `${process.env.NEXT_PUBLIC_WEATHER_ALERT_URL}/users`,
           {},
           { headers: { Authorization: `Bearer ${self.firebaseToken}` } }
         )
@@ -50,7 +50,7 @@ export const UserStore = types
 
       return axios
         .post(
-          `${process.env.NEXT_PUBLIC_AGROAPI_URL}/users/login`,
+          `${process.env.NEXT_PUBLIC_WEATHER_ALERT_URL}/users/login`,
           {},
           { headers: { Authorization: `Bearer ${self.firebaseToken}` } }
         )
