@@ -1,16 +1,23 @@
 import { getAuth, signOut } from 'firebase/auth'
+import { observer } from 'mobx-react-lite'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import { useContext } from 'react'
 import { LoggedInLayout } from '../../layout/loggedInLayout'
 import { app } from '../../services/firebase'
+import { RootStoreContext } from '../../stores/RootStore'
 
-const Home: NextPage = () => {
+const Home: NextPage = observer(() => {
+  const { userStore } = useContext(RootStoreContext)
   const router = useRouter()
+  const auth = getAuth(app)
 
   const logout = () => {
-    const auth = getAuth(app)
     signOut(auth).then(() => router.push('/login'))
   }
+
+  console.log('token: ', userStore.firebaseToken)
+
   return (
     <LoggedInLayout>
       <div>
@@ -19,6 +26,6 @@ const Home: NextPage = () => {
       </div>
     </LoggedInLayout>
   )
-}
+})
 
 export default Home
