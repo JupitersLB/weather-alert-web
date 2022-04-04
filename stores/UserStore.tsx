@@ -1,5 +1,7 @@
 import axios from 'axios'
+import { getAuth, signOut } from 'firebase/auth'
 import { types, flow, cast, Instance } from 'mobx-state-tree'
+import { app } from '../services/firebase'
 import { User } from './models/User'
 
 export const UserStore = types
@@ -72,6 +74,18 @@ export const UserStore = types
   .actions((self) => ({
     initialize() {
       return self.getWeatherAlertToken()
+    },
+    signOut() {
+      const auth = getAuth(app)
+      return signOut(auth).then(() => {
+        self.setFirebaseToken('')
+        self.setWeatherAlertToken({ id: '', value: '' })
+      })
+    },
+  }))
+  .views((self) => ({
+    get isLoggedIn() {
+      return self.weatherAlertToken && self.weatherAlertToken.value.length > 1
     },
   }))
 
