@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { NextPage } from 'next'
 import { useContext } from 'react'
+import { SearchBar } from '../../components/home/searchBar'
 import { LoggedInLayout } from '../../layout/loggedInLayout'
 import { RootStoreContext } from '../../stores/RootStore'
 
@@ -9,10 +10,10 @@ const Home: NextPage = observer(() => {
 
   return (
     <LoggedInLayout>
-      <div className="flex flex-col divide-y-8 p-20">
-        <p>firebase {userStore.firebaseToken}</p>
-        <p>weather id {userStore.weatherAlertToken?.id}</p>
-        <p>weather value {userStore.weatherAlertToken?.value}</p>
+      <div className="w-2/3">
+        <div className="flex flex-col p-20">
+          <SearchBar />
+        </div>
       </div>
     </LoggedInLayout>
   )

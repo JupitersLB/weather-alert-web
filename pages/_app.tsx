@@ -2,10 +2,13 @@ import '../styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css'
 import type { AppProps } from 'next/app'
 import { ToastContainer } from 'react-toastify'
+import { QueryClient, QueryClientProvider } from 'react-query'
+
+const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <Component {...pageProps} />
       <ToastContainer
         position="top-center"
@@ -18,7 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         draggable
         pauseOnHover
       />
-    </>
+    </QueryClientProvider>
   )
 }
 
