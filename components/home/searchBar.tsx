@@ -22,8 +22,6 @@ const SearchResultsContainer: FC<{
   results: any
   handleSearchResults: (place_id: string) => void
 }> = observer(({ results, handleSearchResults }) => {
-  console.log('results: ', results.data.predictions)
-
   return (
     <div className="border-t divide-y">
       {results.data.predictions &&
@@ -48,7 +46,13 @@ export const SearchBar: FC = observer(() => {
     })
   })
 
-  const handleSearchResults = (place_id: string) => {}
+  const handleSearchResults = (placeId: string) => {
+    const url = `${process.env.NEXT_PUBLIC_WEATHER_ALERT_URL}/forecast?place_id=${placeId}`
+    axios
+      .get(url)
+      .then((r) => console.log('forecast r: ', r))
+      .catch((e) => console.log('forecas e: ', e))
+  }
 
   return (
     <div className="min-h-32px flex flex-col mb-2 bg-white border border-silver rounded-lg">
