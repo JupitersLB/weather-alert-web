@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite'
 import { NextPage } from 'next'
 import { useContext } from 'react'
 import { SearchBar } from '../../components/home/searchBar'
+import { CurrentCard } from '../../components/weather/currentCard'
 import { LoggedInLayout } from '../../layout/loggedInLayout'
 import { RootStoreContext } from '../../stores/RootStore'
 
@@ -10,9 +11,12 @@ const Home: NextPage = observer(() => {
 
   return (
     <LoggedInLayout>
-      <div className="w-2/3">
-        <div className="flex flex-col p-20">
+      <div className="flex h-full">
+        <div className="w-2/3 flex flex-col p-20">
           <SearchBar />
+        </div>
+        <div className="w-1/3 flex flex-col p-20">
+          <CurrentCard />
         </div>
       </div>
     </LoggedInLayout>

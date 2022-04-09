@@ -1,4 +1,7 @@
 import { types, Instance } from 'mobx-state-tree'
+import { Transformers } from '../services/weatherAlertApi'
+import { ForecastResponse } from '../types/apiResponses'
+import { Forecast } from './models/Forecast'
 
 const LoginForm = types
   .model('LoginForm', {
@@ -28,14 +31,28 @@ const LogoutForm = types
     },
   }))
 
-export const UiStore = types.model('UiStore', {
-  loginForm: LoginForm,
-  logoutForm: LogoutForm,
-})
+export const UiStore = types
+  .model('UiStore', {
+    loginForm: LoginForm,
+    logoutForm: LogoutForm,
+    searchBar: types.model({
+      showPredictions: true,
+    }),
+    currentWeather: types.maybeNull(Forecast),
+  })
+  .actions((self) => ({
+    setCurrentWeather(data: ForecastResponse) {
+      self.currentWeather = Transformers.forecast(data)
+    },
+    setShowPredictions(show: boolean) {
+      self.searchBar.showPredictions = show
+    },
+  }))
 
 export const uiStore = UiStore.create({
   loginForm: LoginForm.create(),
   logoutForm: LogoutForm.create(),
+  searchBar: { showPredictions: false },
 })
 
 export interface IUiStore extends Instance<typeof UiStore> {}

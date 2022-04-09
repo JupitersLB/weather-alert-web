@@ -33,7 +33,7 @@ export const LoggedInLayout: FC<{ children: any }> = observer(
     })
 
     return (
-      <div className="w-screen break-words">
+      <div className="w-screen break-words h-screen">
         <Navbar isLoggedIn={userStore.isLoggedIn} />
         {children}
       </div>
